@@ -14,7 +14,7 @@ public class InputView {
 
     public List<String> readCommand() {
         String input = scanner.nextLine();
-        if (input.equals(START_COMMAND) || input.equals(END_COMMAND)) {
+        if (input.equals(START_COMMAND) || input.equals(END_COMMAND) || input.equals("status")) {
             return List.of(input);
         }
         if (isMoveCommand(input)) {

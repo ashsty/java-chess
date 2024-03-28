@@ -59,6 +59,9 @@ public class Position {
     public boolean isRank(Rank rank) {
         return this.rank.equals(rank);
     }
+    public boolean isFile(File file) {
+        return this.file.equals(file);
+    }
 
     @Override
     public boolean equals(Object o) {

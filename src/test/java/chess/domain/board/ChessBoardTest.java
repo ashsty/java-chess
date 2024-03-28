@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import chess.domain.piece.Knight;
-import chess.domain.piece.Piece;
+import chess.domain.piece.*;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
@@ -15,6 +14,8 @@ import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class ChessBoardTest {
     @DisplayName("체스보드가 생성되면 32개의 말이 셋팅된다")
@@ -85,5 +86,19 @@ public class ChessBoardTest {
         // when, then
         assertThatThrownBy(() -> chessBoard.move(source, target))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("King Piece가 잡혔는지 확인하고 승리한 팀을 반환한다.")
+    @ParameterizedTest
+    @CsvSource({"E,EIGHT,WHITE", "E,ONE,BLACK", "A,ONE,NONE"})
+    void winByAttackingKing(File file, Rank rank, Team team) {
+        // given
+        ChessBoard chessBoard = new ChessBoard();
+        chessBoard.initialBoard();
+
+        Position target = Position.of(file, rank);
+
+        // when, then
+        assertThat(chessBoard.winByAttackingKing(target)).isEqualTo(team);
     }
 }

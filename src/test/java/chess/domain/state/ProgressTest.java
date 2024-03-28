@@ -1,12 +1,20 @@
 package chess.domain.state;
 
+import static chess.domain.piece.Team.BLACK;
+import static chess.domain.piece.Team.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import chess.domain.board.ChessBoard;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import chess.domain.piece.*;
+import chess.domain.position.File;
+import chess.domain.position.Position;
+import chess.domain.position.Rank;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +43,27 @@ class ProgressTest {
 
         // then
         assertThat(result).isInstanceOf(Progress.class);
+    }
+
+    @DisplayName("Progress는 command로 \"move\"를 받아 King을 잡았을 시 End를 반환한다.")
+    @Test
+    void playWithCommandMove_AttackKing() {
+        // given
+        Map<Position, Piece> board = Map.of(
+                Position.of(File.B, Rank.EIGHT), new King(BLACK),
+                Position.of(File.B, Rank.SEVEN), new Rook(WHITE)
+        );
+
+        Map<Position, Piece> copyBoard = new HashMap<>(board);
+
+        ChessBoard chessBoard = new ChessBoard(copyBoard);
+        Progress progress = new Progress(chessBoard);
+
+        // when
+        GameState result = progress.play(List.of("move", "b7", "b8"));
+
+        // then
+        assertThat(result).isInstanceOf(End.class);
     }
 
     @DisplayName("Progress는 command로 \"end\"를 받으면 End를 반환한다.")

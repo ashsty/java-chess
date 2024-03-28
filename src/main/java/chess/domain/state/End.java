@@ -8,6 +8,12 @@ public class End implements GameState {
     private static final String END_COMMAND = "end";
 
     public End() {
+        team = Team.NONE;
+    }
+
+    @Override
+    public Team findWinner() {
+        return team;
     }
 
     @Override

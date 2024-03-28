@@ -8,12 +8,17 @@ import chess.dto.ChessBoardDto;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ChessBoard {
     private static final Piece EMPTY = new Empty();
-    private final Map<Position, Piece> chessBoard = new LinkedHashMap<>();
+    private final Map<Position, Piece> chessBoard;
 
+    public ChessBoard(Map<Position,Piece> defaultChessBoard) {
+        chessBoard = defaultChessBoard;
+    }
     public ChessBoard() {
+        chessBoard = new LinkedHashMap<>();
     }
 
     public void initialBoard() {
@@ -23,6 +28,28 @@ public class ChessBoard {
 
     public ChessBoardDto convertToDto() {
         return new ChessBoardDto(chessBoard);
+    }
+
+    public Map <Position, Type> findRemainingPieces(Team team) {
+        return chessBoard.entrySet().stream()
+                .filter(entry -> entry.getValue().isSameTeam(team))
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().identifyType()));
+    }
+
+    public Team winByAttackingKing(Position target) {
+        Team winningTeam = Team.NONE;
+
+        if (chessBoard.containsKey(target) && chessBoard.get(target).identifyType() == Type.KING) {
+            return confirmKingColor(chessBoard.get(target));
+        }
+        return winningTeam;
+    }
+
+    private Team confirmKingColor(Piece king) {
+        if (king.isBlack()) {
+            return Team.toggleTeam(Team.BLACK);
+        }
+       return Team.toggleTeam(Team.WHITE);
     }
 
     public void move(Position source, Position target) {

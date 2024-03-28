@@ -1,6 +1,7 @@
 package chess.domain.state;
 
 import chess.domain.board.ChessBoard;
+import chess.domain.piece.Team;
 
 import java.util.List;
 
@@ -13,6 +14,11 @@ public class Ready implements GameState {
 
     public Ready(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
+    }
+
+    @Override
+    public Team findWinner() {
+        return Team.NONE;
     }
 
     @Override

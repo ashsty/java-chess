@@ -1,7 +1,10 @@
 package chess.controller;
 
 import chess.domain.board.ChessBoard;
+import chess.domain.board.ScoreBoard;
+import chess.domain.piece.Team;
 import chess.domain.state.GameState;
+import chess.domain.state.Progress;
 import chess.domain.state.Ready;
 import chess.dto.ChessBoardDto;
 import chess.view.InputView;
@@ -11,6 +14,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class ChessGame {
+    private static final ScoreBoard scoreBoard = new ScoreBoard();
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
 
@@ -35,12 +39,26 @@ public class ChessGame {
 
             printChessBoardInProgress(gameState, chessBoard);
         }
+        return gameState.findWinner();
     }
 
-    private GameState playEachTurn(GameState gameState) {
+    private GameState playEachTurn(GameState gameState, ChessBoard chessBoard) {
         List<String> command = inputView.readCommand();
+
+        if (command.get(0).equals("status") && gameState.getClass().equals(Progress.class)) {
+            printChessStatus(chessBoard);
+            return gameState;
+        }
         gameState = gameState.play(command);
         return gameState;
+    }
+
+    private void printChessStatus(ChessBoard chessBoard) {
+        double blackScore = scoreBoard.calculateScore(chessBoard, Team.BLACK);
+        double whiteScore = scoreBoard.calculateScore(chessBoard, Team.WHITE);
+        Team winner = scoreBoard.findWinner(blackScore, whiteScore);
+
+        outputView.printChessStatus(blackScore, whiteScore, winner);
     }
 
 
