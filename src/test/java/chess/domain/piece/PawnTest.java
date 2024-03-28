@@ -18,7 +18,7 @@ class PawnTest {
     @Test
     void canMoveBlack_start1() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SEVEN);
         Position target = Position.of(File.C, Rank.SIX);
@@ -35,7 +35,7 @@ class PawnTest {
     @Test
     void canMoveBlack_start2() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SEVEN);
         Position target = Position.of(File.C, Rank.FIVE);
@@ -52,7 +52,7 @@ class PawnTest {
     @Test
     void canNotMoveBlackTwoSquare() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.C, Rank.FOUR);
@@ -69,12 +69,12 @@ class PawnTest {
     @Test
     void canNotMoveBlack() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.C, Rank.FIVE);
-        Piece white = new Pawn(Color.WHITE);
-        Piece black = new Pawn(Color.BLACK);
+        Piece white = new Pawn(Team.WHITE);
+        Piece black = new Pawn(Team.BLACK);
 
         // when
         boolean canMove = pawn.canMove(source, target, white);
@@ -89,13 +89,13 @@ class PawnTest {
 
     @DisplayName("target 위치가 대각선이고 다른 색의 말이 있다면 움직일 수 있다.")
     @Test
-    void canMoveBlackWithDiffColorDiagonal() {
+    void canMoveBlackWithDiffTeamDiagonal() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.B, Rank.FIVE);
-        Piece piece = new Pawn(Color.WHITE);
+        Piece piece = new Pawn(Team.WHITE);
 
         // when
         boolean canMove = pawn.canMove(source, target, piece);
@@ -108,7 +108,7 @@ class PawnTest {
     @Test
     void canNotMoveBlackDiagonal() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.B, Rank.FIVE);
@@ -125,7 +125,7 @@ class PawnTest {
     @Test
     void makePathBlack_1() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.C, Rank.FIVE);
@@ -141,7 +141,7 @@ class PawnTest {
     @Test
     void makePathBlack_2() {
         // given
-        Pawn pawn = new Pawn(Color.BLACK);
+        Pawn pawn = new Pawn(Team.BLACK);
 
         Position source = Position.of(File.C, Rank.SEVEN);
         Position target = Position.of(File.C, Rank.FIVE);
@@ -157,7 +157,7 @@ class PawnTest {
     @Test
     void canMoveWhite_start1() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.TWO);
         Position target = Position.of(File.C, Rank.THREE);
@@ -174,7 +174,7 @@ class PawnTest {
     @Test
     void canMoveWhite_start2() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.TWO);
         Position target = Position.of(File.C, Rank.FOUR);
@@ -191,7 +191,7 @@ class PawnTest {
     @Test
     void canNotMoveWhiteTwoSquare() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.THREE);
         Position target = Position.of(File.C, Rank.FIVE);
@@ -208,11 +208,11 @@ class PawnTest {
     @Test
     void canNotMoveWhite() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.C, Rank.SEVEN);
-        Piece piece = new Pawn(Color.BLACK);
+        Piece piece = new Pawn(Team.BLACK);
 
         // when
         boolean canMove = pawn.canMove(source, target, piece);
@@ -223,13 +223,13 @@ class PawnTest {
 
     @DisplayName("target 위치가 대각선이고 다른 색의 말이 있다면 움직일 수 있다.")
     @Test
-    void canMoveWhiteWithDiffColorDiagonal() {
+    void canMoveWhiteWithDiffTeamDiagonal() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.B, Rank.SEVEN);
-        Piece piece = new Pawn(Color.BLACK);
+        Piece piece = new Pawn(Team.BLACK);
 
         // when
         boolean canMove = pawn.canMove(source, target, piece);
@@ -242,7 +242,7 @@ class PawnTest {
     @Test
     void canNotMoveWhiteDiagonal() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.SIX);
         Position target = Position.of(File.B, Rank.SEVEN);
@@ -259,7 +259,7 @@ class PawnTest {
     @Test
     void makePathWhite_1() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.THREE);
         Position target = Position.of(File.B, Rank.FOUR);
@@ -275,7 +275,7 @@ class PawnTest {
     @Test
     void makePathWhite_2() {
         // given
-        Pawn pawn = new Pawn(Color.WHITE);
+        Pawn pawn = new Pawn(Team.WHITE);
 
         Position source = Position.of(File.C, Rank.TWO);
         Position target = Position.of(File.C, Rank.FOUR);

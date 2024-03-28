@@ -20,8 +20,8 @@ class BishopTest {
 
     @BeforeEach
     void setUp() {
-        bishop = new Bishop(Color.WHITE);
-        whitePiece = new Bishop(Color.WHITE);
+        bishop = new Bishop(Team.WHITE);
+        whitePiece = new Bishop(Team.WHITE);
         empty = new Empty();
         source = Position.of(File.C, Rank.ONE);
     }
@@ -54,7 +54,7 @@ class BishopTest {
 
     @DisplayName("target 위치에 같은 색의 말이 있다면 움직일 수 없다.")
     @Test
-    void canNotMoveWithSameColor() {
+    void canNotMoveWithSameTeam() {
         // given
         Position target = Position.of(File.E, Rank.THREE);
 

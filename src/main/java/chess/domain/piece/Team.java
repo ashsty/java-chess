@@ -1,15 +1,12 @@
 package chess.domain.piece;
 
-public enum Color {
+public enum Team {
     BLACK,
     WHITE,
     NONE;
 
-    Color() {
-    }
-
-    public static Color toggleColor(Color color) {
-        if (color == BLACK) {
+    public static Team toggleTeam(Team team) {
+        if (team == BLACK) {
             return WHITE;
         }
         return BLACK;

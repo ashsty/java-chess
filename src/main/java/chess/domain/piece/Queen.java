@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Queen extends Piece {
 
-    public Queen(Color color) {
-        super(color);
+    public Queen(Team team) {
+        super(team);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Queen extends Piece {
 
     @Override
     public boolean canMove(Position source, Position target, Piece piece) {
-        if (piece.isSameColor(color)) {
+        if (piece.isSameTeam(team)) {
             return false;
         }
         return isDiagonalMove(source, target) || isHorizontalMove(source, target) || isVerticalMove(source, target);

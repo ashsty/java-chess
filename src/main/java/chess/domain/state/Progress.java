@@ -1,6 +1,7 @@
 package chess.domain.state;
 
 import chess.domain.board.ChessBoard;
+import chess.domain.piece.Team;
 import chess.domain.position.Position;
 
 import java.util.List;
@@ -40,8 +41,9 @@ public class Progress implements GameState {
             return new Progress(chessBoard);
         }
         if (command.equals(END_COMMAND)) {
-            return new End();
+            return new End(Team.NONE);
         }
+
         throw new IllegalArgumentException("올바르지 않은 command입니다.");
     }
 

@@ -23,7 +23,8 @@ public class ChessGame {
         GameState gameState = new Ready(chessBoard);
         outputView.printStartMessage();
 
-        playGame(gameState, chessBoard);
+        Team winner = playGame(gameState, chessBoard);
+        outputView.printResultMessage(winner);
     }
 
     private ChessBoard generateChessBoard() {
@@ -32,10 +33,10 @@ public class ChessGame {
         return chessBoard;
     }
 
-    private void playGame(GameState gameState, ChessBoard chessBoard) {
+    private Team playGame(GameState gameState, ChessBoard chessBoard) {
         while (!gameState.isEnd()) {
             GameState currentGameState = gameState;
-            gameState = repeatUntilSuccess(() -> playEachTurn(currentGameState));
+            gameState = repeatUntilSuccess(() -> playEachTurn(currentGameState, chessBoard));
 
             printChessBoardInProgress(gameState, chessBoard);
         }

@@ -20,8 +20,8 @@ class KnightTest {
 
     @BeforeEach
     void setUp() {
-        knight = new Knight(Color.WHITE);
-        whitePiece = new Knight(Color.WHITE);
+        knight = new Knight(Team.WHITE);
+        whitePiece = new Knight(Team.WHITE);
         empty = new Empty();
         source = Position.of(File.B, Rank.ONE);
     }
@@ -54,7 +54,7 @@ class KnightTest {
 
     @DisplayName("target 위치에 같은 색의 말이 있다면 움직일 수 없다.")
     @Test
-    void canNotMoveWithSameColor() {
+    void canNotMoveWithSameTeam() {
         // given
         Position target = Position.of(File.A, Rank.THREE);
 

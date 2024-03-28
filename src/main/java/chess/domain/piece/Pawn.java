@@ -15,8 +15,8 @@ public class Pawn extends Piece {
     public static final Rank WHITE_INITIAL_POSITION = Rank.TWO;
     public static final Rank BLACK_INITIAL_POSITION = Rank.SEVEN;
 
-    public Pawn(Color color) {
-        super(color);
+    public Pawn(Team team) {
+        super(team);
     }
 
     @Override
@@ -26,10 +26,10 @@ public class Pawn extends Piece {
 
     @Override
     public boolean canMove(Position source, Position target, Piece piece) {
-        if (piece.isSameColor(color)) {
+        if (piece.isSameTeam(team)) {
             return false;
         }
-        if (this.color == Color.BLACK) {
+        if (this.team == Team.BLACK) {
             return checkBlack(source, target, piece);
         }
         return checkWhite(source, target, piece);
@@ -52,12 +52,12 @@ public class Pawn extends Piece {
         int rankDiff = source.calculateRankDifference(target);
         int fileDiff = source.calculateFileDifference(target);
 
-        Color toggleColor = Color.toggleColor(color);
+        Team toggleTeam = Team.toggleTeam(team);
 
         if (rankDiff == -ONE_SQUARE && Math.abs(fileDiff) == ONE_SQUARE) {
-            return piece.isSameColor(toggleColor);
+            return piece.isSameTeam(toggleTeam);
         }
-        if (piece.isSameColor(toggleColor)) {
+        if (piece.isSameTeam(toggleTeam)) {
             return false;
         }
         if (source.isRank(BLACK_INITIAL_POSITION)) {
@@ -70,12 +70,12 @@ public class Pawn extends Piece {
         int rankDiff = source.calculateRankDifference(target);
         int fileDiff = source.calculateFileDifference(target);
 
-        Color toggleColor = Color.toggleColor(color);
+        Team toggleTeam = Team.toggleTeam(team);
 
         if (rankDiff == ONE_SQUARE && Math.abs(fileDiff) == ONE_SQUARE) {
-            return piece.isSameColor(toggleColor);
+            return piece.isSameTeam(toggleTeam);
         }
-        if (piece.isSameColor(toggleColor)) {
+        if (piece.isSameTeam(toggleTeam)) {
             return false;
         }
         if (source.isRank(WHITE_INITIAL_POSITION)) {

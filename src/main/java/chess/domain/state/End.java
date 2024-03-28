@@ -1,11 +1,19 @@
 package chess.domain.state;
 
+import chess.domain.piece.Team;
+
 import java.util.List;
 
 public class End implements GameState {
     private static final String START_COMMAND = "start";
     private static final String MOVE_COMMAND = "move";
     private static final String END_COMMAND = "end";
+
+    private final Team team;
+
+    public End(Team team) {
+        this.team = team;
+    }
 
     public End() {
         team = Team.NONE;

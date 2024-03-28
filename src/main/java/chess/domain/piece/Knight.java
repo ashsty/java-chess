@@ -10,8 +10,8 @@ import java.util.List;
 public class Knight extends Piece {
     private static final int TWO_SQUARES = 2;
 
-    public Knight(Color color) {
-        super(color);
+    public Knight(Team team) {
+        super(team);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Knight extends Piece {
 
     @Override
     public boolean canMove(Position source, Position target, Piece piece) {
-        if (piece.isSameColor(color)) {
+        if (piece.isSameTeam(team)) {
             return false;
         }
         int rankDiff = source.calculateRankDifference(target);

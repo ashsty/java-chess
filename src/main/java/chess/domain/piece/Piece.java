@@ -9,10 +9,10 @@ public abstract class Piece {
     private static final int STAY = 0;
     private static final int ONE_SQUARE = 1;
 
-    protected Color color;
+    protected Team team;
 
-    protected Piece(Color color) {
-        this.color = color;
+    protected Piece(Team team) {
+        this.team = team;
     }
 
     public abstract Type identifyType();
@@ -22,11 +22,11 @@ public abstract class Piece {
     public abstract List<Position> searchPath(Position source, Position target);
 
     public final boolean isBlack() {
-        return color == Color.BLACK;
+        return team == Team.BLACK;
     }
 
-    public final boolean isSameColor(Color color) {
-        return this.color == color;
+    public final boolean isSameTeam(Team team) {
+        return this.team == team;
     }
 
     public final boolean isHorizontalMove(Position source, Position target) {

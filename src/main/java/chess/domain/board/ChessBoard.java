@@ -56,6 +56,7 @@ public class ChessBoard {
         if (!canMove(source, target)) {
             throw new IllegalArgumentException("올바르지 않은 이동입니다.");
         }
+        
         Piece sourcePiece = chessBoard.get(source);
         chessBoard.put(target, sourcePiece);
         chessBoard.remove(source);
@@ -80,29 +81,29 @@ public class ChessBoard {
     }
 
     private void initializeBlackPieces() {
-        initializeEdgeRank(Rank.EIGHT, Color.BLACK);
-        initializePawnRank(Rank.SEVEN, Color.BLACK);
+        initializeEdgeRank(Rank.EIGHT, Team.BLACK);
+        initializePawnRank(Rank.SEVEN, Team.BLACK);
     }
 
     private void initializeWhitePieces() {
-        initializePawnRank(Rank.TWO, Color.WHITE);
-        initializeEdgeRank(Rank.ONE, Color.WHITE);
+        initializePawnRank(Rank.TWO, Team.WHITE);
+        initializeEdgeRank(Rank.ONE, Team.WHITE);
     }
 
-    private void initializePawnRank(Rank rank, Color color) {
+    private void initializePawnRank(Rank rank, Team team) {
         for (File file : File.values()) {
-            chessBoard.put(Position.of(file, rank), new Pawn(color));
+            chessBoard.put(Position.of(file, rank), new Pawn(team));
         }
     }
 
-    private void initializeEdgeRank(Rank rank, Color color) {
-        chessBoard.put(Position.of(File.A, rank), new Rook(color));
-        chessBoard.put(Position.of(File.B, rank), new Knight(color));
-        chessBoard.put(Position.of(File.C, rank), new Bishop(color));
-        chessBoard.put(Position.of(File.D, rank), new Queen(color));
-        chessBoard.put(Position.of(File.E, rank), new King(color));
-        chessBoard.put(Position.of(File.F, rank), new Bishop(color));
-        chessBoard.put(Position.of(File.G, rank), new Knight(color));
-        chessBoard.put(Position.of(File.H, rank), new Rook(color));
+    private void initializeEdgeRank(Rank rank, Team team) {
+        chessBoard.put(Position.of(File.A, rank), new Rook(team));
+        chessBoard.put(Position.of(File.B, rank), new Knight(team));
+        chessBoard.put(Position.of(File.C, rank), new Bishop(team));
+        chessBoard.put(Position.of(File.D, rank), new Queen(team));
+        chessBoard.put(Position.of(File.E, rank), new King(team));
+        chessBoard.put(Position.of(File.F, rank), new Bishop(team));
+        chessBoard.put(Position.of(File.G, rank), new Knight(team));
+        chessBoard.put(Position.of(File.H, rank), new Rook(team));
     }
 }

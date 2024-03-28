@@ -20,8 +20,8 @@ class KingTest {
 
     @BeforeEach
     void setUp() {
-        king = new King(Color.WHITE);
-        whitePiece = new King(Color.WHITE);
+        king = new King(Team.WHITE);
+        whitePiece = new King(Team.WHITE);
         empty = new Empty();
         source = Position.of(File.E, Rank.ONE);
     }
@@ -54,7 +54,7 @@ class KingTest {
 
     @DisplayName("target 위치에 같은 색의 말이 있다면 움직일 수 없다.")
     @Test
-    void canNotMoveWithSameColor() {
+    void canNotMoveWithSameTeam() {
         // given
         Position target = Position.of(File.D, Rank.TWO);
 

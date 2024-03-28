@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Bishop extends Piece {
 
-    public Bishop(Color color) {
-        super(color);
+    public Bishop(Team team) {
+        super(team);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Bishop extends Piece {
 
     @Override
     public boolean canMove(Position source, Position target, Piece piece) {
-        if (piece.isSameColor(color)) {
+        if (piece.isSameTeam(team)) {
             return false;
         }
         return isDiagonalMove(source, target);
