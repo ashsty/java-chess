@@ -14,9 +14,10 @@ public class ChessBoard {
     private static final Piece EMPTY = new Empty();
     private final Map<Position, Piece> chessBoard;
 
-    public ChessBoard(Map<Position,Piece> defaultChessBoard) {
+    public ChessBoard(Map<Position, Piece> defaultChessBoard) {
         chessBoard = defaultChessBoard;
     }
+
     public ChessBoard() {
         chessBoard = new LinkedHashMap<>();
     }
@@ -30,7 +31,7 @@ public class ChessBoard {
         return new ChessBoardDto(chessBoard);
     }
 
-    public Map <Position, Type> findRemainingPieces(Team team) {
+    public Map<Position, Type> findRemainingPieces(Team team) {
         return chessBoard.entrySet().stream()
                 .filter(entry -> entry.getValue().isSameTeam(team))
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().identifyType()));
@@ -49,14 +50,14 @@ public class ChessBoard {
         if (king.isBlack()) {
             return Team.toggleTeam(Team.BLACK);
         }
-       return Team.toggleTeam(Team.WHITE);
+        return Team.toggleTeam(Team.WHITE);
     }
 
     public void move(Position source, Position target) {
         if (!canMove(source, target)) {
             throw new IllegalArgumentException("올바르지 않은 이동입니다.");
         }
-        
+
         Piece sourcePiece = chessBoard.get(source);
         chessBoard.put(target, sourcePiece);
         chessBoard.remove(source);
