@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class ScoreBoard {
 
+    public static final int PAWN_HALF = 2;
+
     public ScoreBoard() {
     }
 
@@ -33,7 +35,7 @@ public class ScoreBoard {
         }
 
         double count = findSameFilePawn(remaining);
-        return score - count / 2;
+        return score - count / PAWN_HALF;
     }
 
     private double findSameFilePawn(Map<Position, Type> remaining) {

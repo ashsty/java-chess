@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class InputView {
     private static final String START_COMMAND = "start";
+    private static final String STATUS_COMMAND = "status";
     private static final String END_COMMAND = "end";
     private static final String MOVE_COMMAND_FORMAT = "^move [A-Ha-h][1-8] [A-Ha-h][1-8]$";
     private static final String DELIMITER = " ";
@@ -14,7 +15,7 @@ public class InputView {
 
     public List<String> readCommand() {
         String input = scanner.nextLine();
-        if (input.equals(START_COMMAND) || input.equals(END_COMMAND) || input.equals("status")) {
+        if (input.equals(START_COMMAND) || input.equals(END_COMMAND) || input.equals(STATUS_COMMAND)) {
             return List.of(input);
         }
         if (isMoveCommand(input)) {

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class ChessGame {
+    private static final String STATUS_COMMAND = "status";
     private static final ScoreBoard scoreBoard = new ScoreBoard();
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
@@ -46,7 +47,7 @@ public class ChessGame {
     private GameState playEachTurn(GameState gameState, ChessBoard chessBoard) {
         List<String> command = inputView.readCommand();
 
-        if (command.get(0).equals("status") && gameState.getClass().equals(Progress.class)) {
+        if (command.get(0).equals(STATUS_COMMAND) && gameState.getClass().equals(Progress.class)) {
             printChessStatus(chessBoard);
             return gameState;
         }

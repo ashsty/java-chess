@@ -49,7 +49,7 @@ public class OutputView {
             System.out.println("두 팀의 점수가 같습니다." + NEW_LINE);
             return;
         }
-        System.out.println(winnerTeam.name()+"팀의 승리입니다.");
+        System.out.println(winnerTeam.name() + "팀의 승리입니다.");
     }
 
     public void printErrorMessage(String message) {
