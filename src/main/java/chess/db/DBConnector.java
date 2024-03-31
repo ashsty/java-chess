@@ -23,7 +23,7 @@ public class DBConnector {
         try {
             return DriverManager.getConnection("jdbc:mysql://" + SERVER + "/" + database + OPTION, USERNAME, PASSWORD);
         } catch (final SQLException e) {
-            throw new DBConnectionException(e.getMessage(), e);
+            throw new DBException(e.getMessage(), e);
         }
     }
 
@@ -34,71 +34,4 @@ public class DBConnector {
     public static DBConnector getTestDB() {
         return TEST_DATABASE;
     }
-
-    /*public List<User> findAll() {
-
-        try (final var connection = getConnection()) {
-            final var statement = connection.prepareStatement("SELECT * FROM user");
-            final var resultSet = statement.executeQuery();
-
-            final var users = new ArrayList<User>();
-            while (resultSet.next()) {
-                var userId = resultSet.getString("user_id");
-                var name = resultSet.getString("name");
-
-                users.add(new User(userId, name));
-            }
-            return users;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public User findById(final String userId) {
-
-        try (final var connection = getConnection()) {
-            final var statement = connection.prepareStatement("SELECT * FROM user WHERE user_id = ?");
-            statement.setString(1, userId);
-            final var resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                return new User(resultSet.getString("user_id"), resultSet.getString("name"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-
-    public void save(String userId, String name) {
-        try (final var connection = getConnection()) {
-            final var statement = connection.prepareStatement("INSERT INTO user VALUES (?, ?)");
-            statement.setString(1, userId);
-            statement.setString(2, name);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void update(String userId, String name) {
-        try (final var connection = getConnection()) {
-            final var statement = connection.prepareStatement("UPDATE user SET name = ? WHERE user_id = ?");
-            statement.setString(1, name);
-            statement.setString(2, userId);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void delete(String userId) {
-        try (final var connection = getConnection()) {
-            final var statement = connection.prepareStatement("DELETE FROM user WHERE user_id = ?");
-            statement.setString(1, userId);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
 }
