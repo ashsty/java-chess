@@ -33,6 +33,22 @@ public class PiecesDao {
         }
     }
 
+    public List<PieceDto> findByPosition(PieceDto pieceDto) {
+        try (final var connection = dbConnector.getConnection()) {
+            final var statement = connection.prepareStatement(
+                    "SELECT * FROM pieces WHERE board_file =? AND board_rank =?");
+            statement.setString(1, pieceDto.file().name());
+            statement.setString(2, pieceDto.rank().name());
+            final var resultSet = statement.executeQuery();
+            final var pieces = new ArrayList<PieceDto>();
+
+            convertToParsingFormat(resultSet, pieces);
+            return pieces;
+        } catch (SQLException e) {
+            throw new DBException("전체 조회 실패", e);
+        }
+    }
+
     public void save(PieceDto pieceDto) {
         try (final var connection = dbConnector.getConnection()) {
             final var statement = connection.prepareStatement("INSERT INTO pieces VALUES (?, ?, ?, ?)");
@@ -42,9 +58,10 @@ public class PiecesDao {
             statement.setString(4, pieceDto.type().name());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DBException("전체 저장 실패", e);
+            throw new DBException("저장 실패", e);
         }
     }
+
 
     public void update(PieceDto pieceDto) {
         try (final var connection = dbConnector.getConnection()) {

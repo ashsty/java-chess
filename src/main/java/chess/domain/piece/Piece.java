@@ -71,6 +71,10 @@ public abstract class Piece {
         return path;
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
     private int calculateUnit(int difference) {
         if (difference == STAY) {
             return STAY;

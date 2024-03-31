@@ -63,6 +63,10 @@ public class ChessBoard {
         chessBoard.remove(source);
     }
 
+    public Map<Position, Piece> getChessBoard() {
+        return chessBoard;
+    }
+
     private boolean canMove(Position source, Position target) {
         if (!chessBoard.containsKey(source)) {
             throw new IllegalArgumentException("이동할 수 있는 말이 없습니다.");

@@ -2,21 +2,28 @@ package chess.domain.piece;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 
 public enum Type {
-    KING(0),
-    QUEEN(9),
-    BISHOP(3),
-    KNIGHT(2.5),
-    ROOK(5),
-    PAWN(1),
-    EMPTY(0),
+    KING(0, King::new),
+    QUEEN(9, Queen::new),
+    BISHOP(3, Bishop::new),
+    KNIGHT(2.5, Knight::new),
+    ROOK(5, Rook::new),
+    PAWN(1, Pawn::new),
+    EMPTY(0, Empty::new),
     ;
 
     private final double score;
+    private final Function<Team, Piece> operator;
 
-    Type(double score) {
+    Type(double score, Function<Team, Piece> operator) {
         this.score = score;
+        this.operator = operator;
+    }
+
+    public Piece generatePiece(Team team) {
+        return operator.apply(team);
     }
 
     public static double calculateScore(Type typeInput) {
