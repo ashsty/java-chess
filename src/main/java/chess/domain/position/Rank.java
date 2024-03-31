@@ -1,7 +1,9 @@
 package chess.domain.position;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public enum Rank {
     EIGHT(8),
@@ -26,6 +28,13 @@ public enum Rank {
 
     Rank(int rankRow) {
         this.rankRow = rankRow;
+    }
+
+    public static Rank convertToRank(String rankSymbol) {
+        return Arrays.stream(Rank.values())
+                .filter(rank -> rank.name().equals(rankSymbol))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("일치하는 Rank 값이 없습니다."));
     }
 
     public int calculateDifference(Rank otherRank) {

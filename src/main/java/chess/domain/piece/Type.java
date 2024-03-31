@@ -1,6 +1,7 @@
 package chess.domain.piece;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public enum Type {
     KING(0),
@@ -24,5 +25,12 @@ public enum Type {
                 .findFirst()
                 .orElseThrow()
                 .score;
+    }
+
+    public static Type convertToType(String typeSymbol) {
+        return Arrays.stream(Type.values())
+                .filter(type -> type.name().equals(typeSymbol))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("일치하는 Type 값이 없습니다."));
     }
 }

@@ -1,7 +1,6 @@
 package chess.domain.position;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public enum File {
     A(1, "a"),
@@ -28,6 +27,13 @@ public enum File {
     File(int fileColumn, String fileSymbol) {
         this.fileColumn = fileColumn;
         this.fileSymbol = fileSymbol;
+    }
+
+    public static File convertToFile(String fileSymbol) {
+        return Arrays.stream(File.values())
+                .filter(file -> file.name().equals(fileSymbol))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("일치하는 File 값이 없습니다."));
     }
 
     public int calculateDifference(File file) {
