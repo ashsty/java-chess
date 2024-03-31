@@ -5,6 +5,8 @@ import static chess.domain.piece.Team.WHITE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import chess.dao.PiecesDao;
+import chess.db.DBConnector;
 import chess.domain.board.ChessBoard;
 
 import java.util.HashMap;
@@ -15,15 +17,18 @@ import chess.domain.piece.*;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
+import chess.service.ChessService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ProgressTest {
+    ChessService chessService = new ChessService(new PiecesDao(DBConnector.getTestDB()));
+
     @DisplayName("Progress는 command로 \"start\"를 받으면 예외가 발생한다.")
     @Test
     void playWithCommandStart() {
         // given
-        Progress progress = new Progress(new ChessBoard());
+        Progress progress = new Progress(new ChessBoard(), chessService);
 
         // when, then
         assertThatThrownBy(() -> progress.play(List.of("start")))
@@ -36,7 +41,7 @@ class ProgressTest {
         // given
         ChessBoard chessBoard = new ChessBoard();
         chessBoard.initialBoard();
-        Progress progress = new Progress(chessBoard);
+        Progress progress = new Progress(chessBoard, chessService);
 
         // when
         GameState result = progress.play(List.of("move", "b2", "b3"));
@@ -57,7 +62,7 @@ class ProgressTest {
         Map<Position, Piece> copyBoard = new HashMap<>(board);
 
         ChessBoard chessBoard = new ChessBoard(copyBoard);
-        Progress progress = new Progress(chessBoard);
+        Progress progress = new Progress(chessBoard, chessService);
 
         // when
         GameState result = progress.play(List.of("move", "b7", "b8"));
@@ -70,7 +75,7 @@ class ProgressTest {
     @Test
     void playWithCommandEnd() {
         // given
-        Progress progress = new Progress(new ChessBoard());
+        Progress progress = new Progress(new ChessBoard(), chessService);
 
         // when
         GameState result = progress.play(List.of("end"));
@@ -83,7 +88,7 @@ class ProgressTest {
     @Test
     void playWithCommandInvalidValue() {
         // given
-        Progress progress = new Progress(new ChessBoard());
+        Progress progress = new Progress(new ChessBoard(), chessService);
 
         // when, then
         assertThatThrownBy(() -> progress.play(List.of("ash", "ella")))
@@ -94,7 +99,7 @@ class ProgressTest {
     @Test
     void isEnd() {
         // given
-        Progress progress = new Progress(new ChessBoard());
+        Progress progress = new Progress(new ChessBoard(), chessService);
 
         // when
         boolean result = progress.isEnd();

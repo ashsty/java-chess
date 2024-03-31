@@ -12,6 +12,10 @@ public class Empty extends Piece {
         super(Team.NONE);
     }
 
+    public Empty(Team team) {
+        super(team);
+    }
+
     @Override
     public boolean canMove(Position source, Position target, Piece piece) {
         return false;

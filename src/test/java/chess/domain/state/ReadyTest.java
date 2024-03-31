@@ -3,19 +3,23 @@ package chess.domain.state;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import chess.dao.PiecesDao;
+import chess.db.DBConnector;
 import chess.domain.board.ChessBoard;
 
 import java.util.List;
 
+import chess.service.ChessService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ReadyTest {
+    ChessService chessService = new ChessService(new PiecesDao(DBConnector.getTestDB()));
     @DisplayName("Ready는 command로 \"start\"를 받으면 Progress를 반환한다.")
     @Test
     void playWithCommandStart() {
         // given
-        Ready ready = new Ready(new ChessBoard());
+        Ready ready = new Ready(new ChessBoard(), chessService);
 
         // when
         GameState result = ready.play(List.of("start"));
@@ -28,7 +32,7 @@ class ReadyTest {
     @Test
     void playWithCommandMove() {
         // given
-        Ready ready = new Ready(new ChessBoard());
+        Ready ready = new Ready(new ChessBoard(), chessService);
 
         // when, then
         assertThatThrownBy(() -> ready.play(List.of("move", "b1", "b2")))
@@ -39,7 +43,7 @@ class ReadyTest {
     @Test
     void playWithCommandEnd() {
         // given
-        Ready ready = new Ready(new ChessBoard());
+        Ready ready = new Ready(new ChessBoard(), chessService);
 
         // when, then
         assertThatThrownBy(() -> ready.play(List.of("end")))
@@ -50,7 +54,7 @@ class ReadyTest {
     @Test
     void playWithCommandInvalidValue() {
         // given
-        Ready ready = new Ready(new ChessBoard());
+        Ready ready = new Ready(new ChessBoard(), chessService);
 
         // when, then
         assertThatThrownBy(() -> ready.play(List.of("ash", "ella")))
@@ -61,7 +65,7 @@ class ReadyTest {
     @Test
     void isEnd() {
         // given
-        Ready ready = new Ready(new ChessBoard());
+        Ready ready = new Ready(new ChessBoard(), chessService);
 
         // when
         boolean result = ready.isEnd();

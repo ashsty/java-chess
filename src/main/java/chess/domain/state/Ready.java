@@ -2,6 +2,7 @@ package chess.domain.state;
 
 import chess.domain.board.ChessBoard;
 import chess.domain.piece.Team;
+import chess.service.ChessService;
 
 import java.util.List;
 
@@ -11,9 +12,11 @@ public class Ready implements GameState {
     private static final String END_COMMAND = "end";
 
     private final ChessBoard chessBoard;
+    private final ChessService chessService;
 
-    public Ready(ChessBoard chessBoard) {
+    public Ready(ChessBoard chessBoard, ChessService chessService) {
         this.chessBoard = chessBoard;
+        this.chessService = chessService;
     }
 
     @Override
@@ -25,7 +28,7 @@ public class Ready implements GameState {
     public GameState play(List<String> inputCommand) {
         String command = inputCommand.get(0);
         if (command.equals(START_COMMAND)) {
-            return new Progress(chessBoard);
+            return new Progress(chessBoard, chessService);
         }
         if (command.equals(MOVE_COMMAND)) {
             throw new UnsupportedOperationException("게임이 시작되지 않았습니다.");

@@ -3,6 +3,7 @@ package chess.domain.state;
 import chess.domain.board.ChessBoard;
 import chess.domain.piece.Team;
 import chess.domain.position.Position;
+import chess.service.ChessService;
 
 import java.util.List;
 
@@ -12,9 +13,11 @@ public class Progress implements GameState {
     private static final String END_COMMAND = "end";
 
     private final ChessBoard chessBoard;
+    private final ChessService chessService;
 
-    public Progress(ChessBoard chessBoard) {
+    public Progress(ChessBoard chessBoard, ChessService chessService) {
         this.chessBoard = chessBoard;
+        this.chessService = chessService;
     }
 
     @Override
@@ -31,20 +34,24 @@ public class Progress implements GameState {
         if (command.equals(MOVE_COMMAND)) {
             Position source = Position.from(inputCommand.get(1));
             Position target = Position.from(inputCommand.get(2));
-
-            Team team = chessBoard.winByAttackingKing(target);
-            chessBoard.move(source, target);
-
-            if (team != Team.NONE) {
-                return new End(team);
-            }
-            return new Progress(chessBoard);
+            return findKingHasCaught(target, source);
         }
         if (command.equals(END_COMMAND)) {
+            chessService.clearGame();
             return new End(Team.NONE);
         }
-
         throw new IllegalArgumentException("올바르지 않은 command입니다.");
+    }
+
+    private GameState findKingHasCaught(Position target, Position source) {
+        Team team = chessBoard.winByAttackingKing(target);
+        chessBoard.move(source, target);
+        if (team != Team.NONE) {
+            chessService.clearGame();
+            return new End(team);
+        }
+        chessService.movePiece(chessBoard, source, target);
+        return new Progress(chessBoard, chessService);
     }
 
     @Override
