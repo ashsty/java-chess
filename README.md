@@ -1,10 +1,22 @@
 # java-chess
 
-체스 미션 저장소
+## DB 실행 방식
 
-## 우아한테크코스 코드리뷰
+1. docker-compose.yml 실행 (포트 : 13306)
+2. docker 폴더 경로에서 docker 켜기
+   - _docker-compose -p chess up -d_
+3. Workbench에서 init.sql 내용 실행
 
-- [온라인 코드 리뷰 과정](https://github.com/woowacourse/woowacourse-docs/blob/master/maincourse/README.md)
+## 게임 저장 방식
+
+- [x] 게임 저장
+  - [x] start command를 입력하면 체스판이 시작됨
+    - [x] 저장된 체스판이 없으면 체스판을 초기 위치로 설정
+    - [x] 저장된 체스판이 있으면 load
+  - [x] move command를 입력해 기물이 이동하면 해당 기물의 위치가 업데이트됨
+  - [x] 아래 두 경우 게임이 종료되며 저장된 체스판이 초기화됨
+    - [x] end command 입력
+    - [x] king이 잡히며 게임 종료
 
 ---
 
@@ -19,6 +31,7 @@
 
 -[x] 사용자로부터 command 입력을 받는다
     - [x] start를 입력하면 게임을 시작한다
+    - [x] status를 입력하면 각 진영 당 현재 남아있는 말의 점수를 계산한다
     - [x] end를 입력하면 게임이 종료된다
     - [x] move를 입력하면 말이 이동한다
         - [x] 입력은 move source위치 target위치 의 형태로 입력한다
@@ -34,6 +47,7 @@
 ### 게임 규칙
 
 - [x] 나이트를 제외한 다른 말들은 경로 상에 다른 말이 있다면 뛰어넘을 수 없다
+- [x] 킹이 잡히는 경우 게임이 종료된다 </br>
 - [x] King
     - [x] 상, 하, 좌, 우, 대각선으로 한 칸만 움직일 수 있다
 - [x] Queen
@@ -50,6 +64,25 @@
     - [x] 첫 이동이 아닌 경우 상대 방향으로 1칸만 움직일 수 있다
     - [x] 대각선에 상대방 말이 있는 경우 말을 잡고, 그 위치로 이동할 수 있다
 
+### 점수 계산
+
+- [x] King
+  - [x] 0점
+- [x] Queen
+  - [x] 9점
+- [x] Rook
+  - [x] 5점
+- [x] Bishop
+  - [x] 3점
+- [x] Knight
+  - [x] 2점
+- [x] Pawn
+  - [x] 1점
+  - [x] 같은 열에 같은 색 폰이 있는 경우 해당 열의 모든 폰은 0.5점으로 처리한다.
+
 ### 출력
 
 - [x] 체스판을 출력한다
+- [x] 게임이 종료되는 경우 승자를 출력한다
+  - [x] BLACK / WHITE
+  - [x] NONE (승부를 가리기 전 게임 종료)
