@@ -50,7 +50,7 @@ public abstract class Piece {
         return Math.abs(rankDiff) == Math.abs(fileDiff);
     }
 
-    public final List<Position> slidingMove(Position source, Position target, boolean isVertical) {
+    public final List<Position> slidingMove(Position source, Position target, boolean moveFileOnly) {
         int rankDiff = source.calculateRankDifference(target);
         int fileDiff = source.calculateFileDifference(target);
 
@@ -60,7 +60,7 @@ public abstract class Piece {
 
         List<Position> path = new ArrayList<>();
 
-        if (isVertical) {
+        if (moveFileOnly) {
             movingDistance = Math.abs(fileDiff);
         }
 
