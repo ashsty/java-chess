@@ -43,7 +43,7 @@ public class ChessBoardTest {
         Position target = Position.of(File.C, Rank.THREE);
 
         // when
-        chessBoard.move(source, target);
+        chessBoard.move(source, target, Team.WHITE);
 
         // then
         Field field = ChessBoard.class.getDeclaredField("chessBoard");
@@ -69,7 +69,7 @@ public class ChessBoardTest {
         Position target = Position.of(File.C, Rank.EIGHT);
 
         // when, then
-        assertThatThrownBy(() -> chessBoard.move(source, target))
+        assertThatThrownBy(() -> chessBoard.move(source, target, Team.WHITE))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -84,13 +84,13 @@ public class ChessBoardTest {
         Position target = Position.of(File.B, Rank.FOUR);
 
         // when, then
-        assertThatThrownBy(() -> chessBoard.move(source, target))
+        assertThatThrownBy(() -> chessBoard.move(source, target, Team.WHITE))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("King Piece가 잡혔는지 확인하고 승리한 팀을 반환한다.")
+    @DisplayName("King Piece가 잡혔는지 확인한다.")
     @ParameterizedTest
-    @CsvSource({"E,EIGHT,WHITE", "E,ONE,BLACK", "A,ONE,NONE"})
+    @CsvSource({"E,EIGHT,WHITE", "E,ONE,BLACK"})
     void winByAttackingKing(File file, Rank rank, Team team) {
         // given
         ChessBoard chessBoard = new ChessBoard();
@@ -99,6 +99,21 @@ public class ChessBoardTest {
         Position target = Position.of(file, rank);
 
         // when, then
-        assertThat(chessBoard.winByAttackingKing(target)).isEqualTo(team);
+        assertThat(chessBoard.winByAttackingKing(target)).isTrue();
+    }
+
+    @DisplayName("Turn이 바뀌면 해당하지 않는 Team의 말은 움직일 수 없다.")
+    @Test
+    void moveByTurn() {
+        // given
+        ChessBoard chessBoard = new ChessBoard();
+        chessBoard.initialBoard();
+
+        Position source = Position.of(File.B, Rank.TWO);
+        Position target = Position.of(File.B, Rank.FOUR);
+
+        // when, then
+        assertThatThrownBy(() -> chessBoard.move(source, target, Team.BLACK))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

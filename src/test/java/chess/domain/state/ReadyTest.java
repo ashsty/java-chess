@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import chess.dao.PiecesDao;
+import chess.dao.TurnsDao;
 import chess.db.DBConnector;
 import chess.domain.board.ChessBoard;
 
@@ -14,7 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ReadyTest {
-    ChessService chessService = new ChessService(new PiecesDao(DBConnector.getTestDB()));
+    ChessService chessService = new ChessService(
+            new PiecesDao(DBConnector.getTestDB()), new TurnsDao(DBConnector.getTestDB()));
     @DisplayName("Ready는 command로 \"start\"를 받으면 Progress를 반환한다.")
     @Test
     void playWithCommandStart() {

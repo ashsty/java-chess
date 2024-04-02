@@ -37,25 +37,17 @@ public class ChessBoard {
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().identifyType()));
     }
 
-    public Team winByAttackingKing(Position target) {
-        Team winningTeam = Team.NONE;
-
-        if (chessBoard.containsKey(target) && chessBoard.get(target).identifyType() == Type.KING) {
-            return confirmKingColor(chessBoard.get(target));
-        }
-        return winningTeam;
+    public boolean winByAttackingKing(Position target) {
+        return chessBoard.containsKey(target) && chessBoard.get(target).identifyType() == Type.KING;
     }
 
-    private Team confirmKingColor(Piece king) {
-        if (king.isBlack()) {
-            return Team.toggleTeam(Team.BLACK);
-        }
-        return Team.toggleTeam(Team.WHITE);
-    }
-
-    public void move(Position source, Position target) {
+    public void move(Position source, Position target, Team team) {
         if (!canMove(source, target)) {
             throw new IllegalArgumentException("올바르지 않은 이동입니다.");
+        }
+
+        if (!chessBoard.get(source).isSameTeam(team)) {
+            throw new IllegalArgumentException(team.toggleTeam().name() + "의 턴이 아닙니다.");
         }
 
         Piece sourcePiece = chessBoard.get(source);

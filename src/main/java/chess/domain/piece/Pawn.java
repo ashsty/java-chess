@@ -52,7 +52,7 @@ public class Pawn extends Piece {
         int rankDiff = source.calculateRankDifference(target);
         int fileDiff = source.calculateFileDifference(target);
 
-        Team toggleTeam = Team.toggleTeam(team);
+        Team toggleTeam = team.toggleTeam();
 
         if (rankDiff == -ONE_SQUARE && Math.abs(fileDiff) == ONE_SQUARE) {
             return piece.isSameTeam(toggleTeam);
@@ -70,7 +70,7 @@ public class Pawn extends Piece {
         int rankDiff = source.calculateRankDifference(target);
         int fileDiff = source.calculateFileDifference(target);
 
-        Team toggleTeam = Team.toggleTeam(team);
+        Team toggleTeam = team.toggleTeam();
 
         if (rankDiff == ONE_SQUARE && Math.abs(fileDiff) == ONE_SQUARE) {
             return piece.isSameTeam(toggleTeam);

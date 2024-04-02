@@ -8,8 +8,11 @@ public enum Team {
     WHITE,
     NONE;
 
-    public static Team toggleTeam(Team team) {
-        if (team == BLACK) {
+    public Team toggleTeam() {
+        if (this == NONE) {
+            throw new IllegalArgumentException("NONE은 플레이 팀이 아닙니다.");
+        }
+        if (this == BLACK) {
             return WHITE;
         }
         return BLACK;

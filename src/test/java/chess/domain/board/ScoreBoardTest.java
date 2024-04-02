@@ -95,7 +95,7 @@ class ScoreBoardTest {
         ChessBoard chessBoard = new ChessBoard(copyBoard);
         ScoreBoard scoreBoard = new ScoreBoard();
 
-        chessBoard.move(Position.of(File.F, Rank.FOUR), Position.of(File.E, Rank.SIX));
+        chessBoard.move(Position.of(File.F, Rank.FOUR), Position.of(File.E, Rank.SIX), WHITE);
 
         double blackScore = scoreBoard.calculateScore(chessBoard, BLACK);
         double whiteScore = scoreBoard.calculateScore(chessBoard, WHITE);

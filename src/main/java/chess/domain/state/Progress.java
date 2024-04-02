@@ -14,10 +14,12 @@ public class Progress implements GameState {
 
     private final ChessBoard chessBoard;
     private final ChessService chessService;
+    private final Team team;
 
-    public Progress(ChessBoard chessBoard, ChessService chessService) {
+    public Progress(ChessBoard chessBoard, ChessService chessService, Team team) {
         this.chessBoard = chessBoard;
         this.chessService = chessService;
+        this.team = team;
     }
 
     @Override
@@ -44,14 +46,15 @@ public class Progress implements GameState {
     }
 
     private GameState findKingHasCaught(Position target, Position source) {
-        Team team = chessBoard.winByAttackingKing(target);
-        chessBoard.move(source, target);
-        if (team != Team.NONE) {
+        boolean attackKing = chessBoard.winByAttackingKing(target);
+        chessBoard.move(source, target, team);
+        if (attackKing) {
             chessService.clearGame();
             return new End(team);
         }
         chessService.movePiece(chessBoard, source, target);
-        return new Progress(chessBoard, chessService);
+        chessService.toggleTurn(team.toggleTeam());
+        return new Progress(chessBoard, chessService, team.toggleTeam());
     }
 
     @Override

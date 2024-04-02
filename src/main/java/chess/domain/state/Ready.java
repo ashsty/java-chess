@@ -13,10 +13,18 @@ public class Ready implements GameState {
 
     private final ChessBoard chessBoard;
     private final ChessService chessService;
+    private final Team team;
 
     public Ready(ChessBoard chessBoard, ChessService chessService) {
         this.chessBoard = chessBoard;
         this.chessService = chessService;
+        team = Team.WHITE;
+    }
+
+    public Ready(ChessBoard chessBoard, ChessService chessService, Team team) {
+        this.chessBoard = chessBoard;
+        this.chessService = chessService;
+        this.team = team;
     }
 
     @Override
@@ -28,7 +36,7 @@ public class Ready implements GameState {
     public GameState play(List<String> inputCommand) {
         String command = inputCommand.get(0);
         if (command.equals(START_COMMAND)) {
-            return new Progress(chessBoard, chessService);
+            return new Progress(chessBoard, chessService, team);
         }
         if (command.equals(MOVE_COMMAND)) {
             throw new UnsupportedOperationException("게임이 시작되지 않았습니다.");
