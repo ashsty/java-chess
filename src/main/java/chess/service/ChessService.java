@@ -1,6 +1,7 @@
 package chess.service;
 
 import chess.dao.PiecesDao;
+import chess.dao.TurnsDao;
 import chess.domain.board.ChessBoard;
 import chess.domain.piece.Piece;
 import chess.domain.piece.Team;
@@ -9,6 +10,7 @@ import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
 import chess.dto.PieceDto;
+import chess.dto.TurnDto;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,20 +18,27 @@ import java.util.Map;
 
 public class ChessService {
     private final PiecesDao piecesDao;
+    private final TurnsDao turnsDao;
 
-    public ChessService(PiecesDao piecesDao) {
+    public ChessService(PiecesDao piecesDao, TurnsDao turnsDao) {
         this.piecesDao = piecesDao;
+        this.turnsDao = turnsDao;
     }
 
     public boolean hasNoLastGame() {
-        return piecesDao.findAll().isEmpty();
+        return piecesDao.findAll().isEmpty() || turnsDao.find().isEmpty();
     }
 
-    public void saveEntireChessBoard(ChessBoard chessBoard) {
+    public void saveChessBoard(ChessBoard chessBoard) {
         Map<Position, Piece> currentChessBoard = chessBoard.getChessBoard();
         piecesDao.deleteAll();
 
         convertChessBoard(currentChessBoard);
+    }
+
+    public void saveTurn(Team team) {
+        TurnDto turnDto = new TurnDto(team);
+        turnsDao.save(turnDto);
     }
 
     public void movePiece(ChessBoard chessBoard, Position source, Position target) {
@@ -44,10 +53,15 @@ public class ChessService {
         piecesDao.delete(previousPiece);
     }
 
+    public void toggleTurn(Team team) {
+        TurnDto turnDto = new TurnDto(team);
+        turnsDao.update(turnDto);
+    }
+
     public ChessBoard loadChessBoard() {
         List<PieceDto> pieces = piecesDao.findAll();
-
         Map<Position, Piece> chessBoardBackUp = new HashMap<>();
+
         for (PieceDto pieceDto : pieces) {
             Position position = Position.of(pieceDto.file(), pieceDto.rank());
             Piece piece = pieceDto.type().generatePiece(pieceDto.team());
@@ -57,8 +71,16 @@ public class ChessService {
         return new ChessBoard(chessBoardBackUp);
     }
 
+    public Team loadTurn() {
+        TurnDto turnDto = turnsDao.find()
+                .orElseThrow(() -> new IllegalStateException("조회 가능한 turn이 없습니다."));
+
+        return turnDto.team();
+    }
+
     public void clearGame() {
         piecesDao.deleteAll();
+        turnsDao.delete();
     }
 
     private void convertChessBoard(Map<Position, Piece> currentChessBoard) {

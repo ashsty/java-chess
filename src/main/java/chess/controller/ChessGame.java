@@ -1,6 +1,7 @@
 package chess.controller;
 
 import chess.dao.PiecesDao;
+import chess.dao.TurnsDao;
 import chess.db.DBConnector;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.ScoreBoard;
@@ -22,11 +23,12 @@ public class ChessGame {
 
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
-    private final ChessService chessService = new ChessService(new PiecesDao(DBConnector.getProductionDB()));
+    private final ChessService chessService = new ChessService(
+            new PiecesDao(DBConnector.getProductionDB()), new TurnsDao(DBConnector.getProductionDB()));
 
     public void run() {
         ChessBoard chessBoard = setChessBoard();
-        GameState gameState = new Ready(chessBoard, chessService);
+        GameState gameState = setGameState(chessBoard);
         outputView.printStartMessage();
 
         Team winner = playGame(gameState, chessBoard);
@@ -37,10 +39,18 @@ public class ChessGame {
         if (chessService.hasNoLastGame()) {
             ChessBoard chessBoard = new ChessBoard();
             chessBoard.initialBoard();
-            chessService.saveEntireChessBoard(chessBoard);
+            chessService.saveChessBoard(chessBoard);
             return chessBoard;
         }
         return chessService.loadChessBoard();
+    }
+
+    private GameState setGameState(ChessBoard chessBoard) {
+        if (chessService.hasNoLastGame()) {
+            chessService.saveTurn(Team.WHITE);
+            return new Ready(chessBoard, chessService);
+        }
+        return new Ready(chessBoard, chessService, chessService.loadTurn());
     }
 
     private Team playGame(GameState gameState, ChessBoard chessBoard) {
@@ -56,7 +66,7 @@ public class ChessGame {
     private GameState playEachTurn(GameState gameState, ChessBoard chessBoard) {
         List<String> command = inputView.readCommand();
 
-        if (command.get(0).equals(STATUS_COMMAND) && gameState.getClass().equals(Progress.class)) {
+        if (STATUS_COMMAND.equals(command.get(0)) && gameState.getClass().isInstance(Progress.class)) {
             printChessStatus(chessBoard);
             return gameState;
         }
