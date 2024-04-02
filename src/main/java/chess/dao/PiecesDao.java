@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PiecesDao {
-    DBConnector dbConnector;
+    private final DBConnector dbConnector;
 
     public PiecesDao(DBConnector dbConnector) {
         this.dbConnector = dbConnector;
@@ -36,7 +36,7 @@ public class PiecesDao {
     public List<PieceDto> findByPosition(PieceDto pieceDto) {
         try (final var connection = dbConnector.getConnection()) {
             final var statement = connection.prepareStatement(
-                    "SELECT * FROM pieces WHERE board_file =? AND board_rank =?");
+                    "SELECT * FROM pieces WHERE board_file = ? AND board_rank = ?");
             statement.setString(1, pieceDto.file().name());
             statement.setString(2, pieceDto.rank().name());
             final var resultSet = statement.executeQuery();
@@ -66,7 +66,7 @@ public class PiecesDao {
     public void update(PieceDto pieceDto) {
         try (final var connection = dbConnector.getConnection()) {
             final var statement = connection.prepareStatement(
-                    "UPDATE pieces SET piece_team = ?, piece_type =? WHERE board_file = ? AND board_rank =?");
+                    "UPDATE pieces SET piece_team =  ?, piece_type = ? WHERE board_file = ? AND board_rank = ?");
             statement.setString(1, pieceDto.team().name());
             statement.setString(2, pieceDto.type().name());
             statement.setString(3, pieceDto.file().name());
@@ -80,22 +80,21 @@ public class PiecesDao {
     public void delete(PieceDto pieceDto) {
         try (final var connection = dbConnector.getConnection()) {
             final var statement = connection.prepareStatement(
-                    "DELETE FROM pieces WHERE board_file = ? AND board_rank =?");
+                    "DELETE FROM pieces WHERE board_file = ? AND board_rank = ?");
             statement.setString(1, pieceDto.file().name());
             statement.setString(2, pieceDto.rank().name());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DBException("삭제 실패", e);
         }
     }
 
     public void deleteAll() {
         try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement(
-                    "DELETE FROM pieces");
+            final var statement = connection.prepareStatement("DELETE FROM pieces");
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DBException("전체 삭제 실패", e);
         }
     }
 

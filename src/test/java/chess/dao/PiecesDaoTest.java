@@ -1,6 +1,7 @@
 package chess.dao;
 
 import chess.db.DBConnector;
+import chess.db.DBException;
 import chess.domain.piece.Team;
 import chess.domain.piece.Type;
 import chess.domain.position.File;
@@ -27,7 +28,7 @@ class PiecesDaoTest {
             PreparedStatement resetTable = connection.prepareStatement("TRUNCATE TABLE pieces");
             resetTable.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DBException("초기화 실패", e);
         }
     }
 
