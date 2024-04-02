@@ -23,51 +23,31 @@ public class ChessGame {
 
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
-    private final ChessService chessService = new ChessService(
-            new PiecesDao(DBConnector.getProductionDB()), new TurnsDao(DBConnector.getProductionDB()));
 
     public void run() {
-        ChessBoard chessBoard = setChessBoard();
-        GameState gameState = setGameState(chessBoard);
         outputView.printStartMessage();
 
-        Team winner = playGame(gameState, chessBoard);
+        GameState gameState = new Ready();
+        Team winner = playGame(gameState);
+
         outputView.printResultMessage(winner);
     }
 
-    private ChessBoard setChessBoard() {
-        if (chessService.hasNoLastGame()) {
-            ChessBoard chessBoard = new ChessBoard();
-            chessBoard.initialBoard();
-            chessService.saveChessBoard(chessBoard);
-            return chessBoard;
-        }
-        return chessService.loadChessBoard();
-    }
-
-    private GameState setGameState(ChessBoard chessBoard) {
-        if (chessService.hasNoLastGame()) {
-            chessService.saveTurn(Team.WHITE);
-            return new Ready(chessBoard, chessService);
-        }
-        return new Ready(chessBoard, chessService, chessService.loadTurn());
-    }
-
-    private Team playGame(GameState gameState, ChessBoard chessBoard) {
+    private Team playGame(GameState gameState) {
         while (!gameState.isEnd()) {
             GameState currentGameState = gameState;
-            gameState = repeatUntilSuccess(() -> playEachTurn(currentGameState, chessBoard));
+            gameState = repeatUntilSuccess(() -> playEachTurn(currentGameState));
 
-            printChessBoardInProgress(gameState, chessBoard);
+            printChessBoardInProgress(gameState);
         }
         return gameState.findWinner();
     }
 
-    private GameState playEachTurn(GameState gameState, ChessBoard chessBoard) {
-        List<String> command = inputView.readCommand();
+    private GameState playEachTurn(GameState gameState) {
 
-        if (STATUS_COMMAND.equals(command.get(0)) && gameState.getClass().isInstance(Progress.class)) {
-            printChessStatus(chessBoard);
+        List<String> command = inputView.readCommand();
+        if (STATUS_COMMAND.equals(command.get(0)) && gameState instanceof Progress) {
+            printChessStatus(gameState.getChessBoard());
             return gameState;
         }
         gameState = gameState.play(command);
@@ -83,10 +63,10 @@ public class ChessGame {
     }
 
 
-    private void printChessBoardInProgress(GameState gameState, ChessBoard chessBoard) {
+    private void printChessBoardInProgress(GameState gameState) {
         ChessBoardDto chessBoardDto;
         if (!gameState.isEnd()) {
-            chessBoardDto = chessBoard.convertToDto();
+            chessBoardDto = gameState.getChessBoard().convertToDto();
             outputView.printChessBoard(chessBoardDto);
         }
     }

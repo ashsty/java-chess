@@ -23,6 +23,10 @@ public class Progress implements GameState {
     }
 
     @Override
+    public ChessBoard getChessBoard() {
+        return chessBoard;
+    }
+    @Override
     public Team findWinner() {
         return Team.NONE;
     }

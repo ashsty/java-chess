@@ -1,5 +1,8 @@
 package chess.domain.state;
 
+import chess.dao.PiecesDao;
+import chess.dao.TurnsDao;
+import chess.db.DBConnector;
 import chess.domain.board.ChessBoard;
 import chess.domain.piece.Team;
 import chess.service.ChessService;
@@ -11,27 +14,24 @@ public class Ready implements GameState {
     private static final String MOVE_COMMAND = "move";
     private static final String END_COMMAND = "end";
 
-    private final ChessBoard chessBoard;
-    private final ChessService chessService;
-    private final Team team;
+    private ChessBoard chessBoard = new ChessBoard();
+    private final ChessService chessService = new ChessService(
+            new PiecesDao(DBConnector.getProductionDB()), new TurnsDao(DBConnector.getProductionDB()));;
+    private Team team = Team.WHITE;
 
-    public Ready(ChessBoard chessBoard, ChessService chessService) {
-        this.chessBoard = chessBoard;
-        this.chessService = chessService;
-        team = Team.WHITE;
+    public Ready(){
+        initializeGameSetting();
     }
 
-    public Ready(ChessBoard chessBoard, ChessService chessService, Team team) {
-        this.chessBoard = chessBoard;
-        this.chessService = chessService;
-        this.team = team;
+    @Override
+    public ChessBoard getChessBoard() {
+        return chessBoard;
     }
 
     @Override
     public Team findWinner() {
         return Team.NONE;
     }
-
     @Override
     public GameState play(List<String> inputCommand) {
         String command = inputCommand.get(0);
@@ -50,5 +50,16 @@ public class Ready implements GameState {
     @Override
     public boolean isEnd() {
         return false;
+    }
+
+    private void initializeGameSetting() {
+        if (chessService.hasNoLastGame()) {
+            chessBoard.initialBoard();
+            chessService.saveChessBoard(chessBoard);
+            chessService.saveTurn(Team.WHITE);
+            return;
+        }
+        chessBoard = chessService.loadChessBoard();
+        team = chessService.loadTurn();
     }
 }
