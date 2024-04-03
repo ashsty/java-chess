@@ -1,8 +1,5 @@
 package chess.controller;
 
-import chess.dao.PiecesDao;
-import chess.dao.TurnsDao;
-import chess.db.DBConnector;
 import chess.domain.board.ChessBoard;
 import chess.domain.board.ScoreBoard;
 import chess.domain.piece.Team;
@@ -10,7 +7,6 @@ import chess.domain.state.GameState;
 import chess.domain.state.Progress;
 import chess.domain.state.Ready;
 import chess.dto.ChessBoardDto;
-import chess.service.ChessService;
 import chess.view.InputView;
 import chess.view.OutputView;
 

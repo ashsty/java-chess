@@ -17,45 +17,21 @@ public class TurnsDao {
     }
 
     public Optional<TurnDto> find() {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement("SELECT * FROM turns");
-            final var resultSet = statement.executeQuery();
-
-            return convertToParsingFormat(resultSet);
-        } catch (SQLException e) {
-            throw new DBException("조회 실패", e);
-        }
+        return executeQuery("SELECT * FROM turns", "조회 실패");
     }
 
     public void save(TurnDto turnDto) {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement("INSERT INTO turns VALUES (?)");
-            statement.setString(1, turnDto.team().name());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DBException("저장 실패", e);
-        }
+        executeUpdate("INSERT INTO turns VALUES (?)", "저장 실패", turnDto.team().name());
     }
 
     public void update(TurnDto turnDto) {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement(
-                    "UPDATE turns SET current_team = ? WHERE current_team = ?");
-            statement.setString(1, turnDto.team().name());
-            statement.setString(2, turnDto.team().toggleTeam().name());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DBException("업데이트 실패", e);
-        }
+        executeUpdate("UPDATE turns SET current_team = ? WHERE current_team = ?",
+                "업데이트 실패",
+                turnDto.team().name(), turnDto.team().toggleTeam().name());
     }
 
     public void delete() {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement("DELETE FROM turns");
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DBException("삭제 실패", e);
-        }
+        executeUpdate("DELETE FROM turns","삭제 실패");
     }
 
     private static Optional<TurnDto> convertToParsingFormat(ResultSet resultSet) throws SQLException {
@@ -65,5 +41,31 @@ public class TurnsDao {
             return Optional.of(turns);
         }
         return Optional.empty();
+    }
+
+    private Optional<TurnDto> executeQuery(String query, String errorMessage, Object... parameters) {
+        try (final var connection = dbConnector.getConnection()) {
+            final var statement = connection.prepareStatement(query);
+            for (int i = 0; i < parameters.length; i++) {
+                statement.setObject(i + 1, parameters[i]);
+            }
+            final var resultSet = statement.executeQuery();
+
+            return convertToParsingFormat(resultSet);
+        } catch (SQLException e) {
+            throw new DBException(errorMessage, e);
+        }
+    }
+
+    private void executeUpdate(String query, String errorMessage, Object... parameters) {
+        try (final var connection = dbConnector.getConnection()) {
+            final var statement = connection.prepareStatement(query);
+            for (int i = 0; i < parameters.length; i++) {
+                statement.setObject(i + 1, parameters[i]);
+            }
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DBException(errorMessage, e);
+        }
     }
 }

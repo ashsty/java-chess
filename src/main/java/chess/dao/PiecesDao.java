@@ -21,81 +21,37 @@ public class PiecesDao {
     }
 
     public List<PieceDto> findAll() {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement("SELECT * FROM pieces");
-            final var resultSet = statement.executeQuery();
-            final var pieces = new ArrayList<PieceDto>();
-
-            convertToParsingFormat(resultSet, pieces);
-            return pieces;
-        } catch (SQLException e) {
-            throw new DBException("전체 조회 실패", e);
-        }
+        return executeQuery("SELECT * FROM pieces", "전체 조회 실패");
     }
 
     public List<PieceDto> findByPosition(PieceDto pieceDto) {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement(
-                    "SELECT * FROM pieces WHERE board_file = ? AND board_rank = ?");
-            statement.setString(1, pieceDto.file().name());
-            statement.setString(2, pieceDto.rank().name());
-            final var resultSet = statement.executeQuery();
-            final var pieces = new ArrayList<PieceDto>();
-
-            convertToParsingFormat(resultSet, pieces);
-            return pieces;
-        } catch (SQLException e) {
-            throw new DBException("전체 조회 실패", e);
-        }
+        return executeQuery("SELECT * FROM pieces WHERE board_file = ? AND board_rank = ?",
+                "조회 실패",
+                pieceDto.file().name(), pieceDto.rank().name());
     }
 
     public void save(PieceDto pieceDto) {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement("INSERT INTO pieces VALUES (?, ?, ?, ?)");
-            statement.setString(1, pieceDto.file().name());
-            statement.setString(2, pieceDto.rank().name());
-            statement.setString(3, pieceDto.team().name());
-            statement.setString(4, pieceDto.type().name());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DBException("저장 실패", e);
-        }
+        executeUpdate("INSERT INTO pieces VALUES (?, ?, ?, ?)",
+                "저장 실패",
+                pieceDto.file().name(), pieceDto.rank().name(),
+                pieceDto.team().name(), pieceDto.type().name());
     }
 
-
     public void update(PieceDto pieceDto) {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement(
-                    "UPDATE pieces SET piece_team =  ?, piece_type = ? WHERE board_file = ? AND board_rank = ?");
-            statement.setString(1, pieceDto.team().name());
-            statement.setString(2, pieceDto.type().name());
-            statement.setString(3, pieceDto.file().name());
-            statement.setString(4, pieceDto.rank().name());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DBException("업데이트 실패", e);
-        }
+        executeUpdate("UPDATE pieces SET piece_team = ?, piece_type = ? WHERE board_file = ? AND board_rank = ?",
+                "업데이트 실패",
+                pieceDto.team().name(), pieceDto.type().name(),
+                pieceDto.file().name(), pieceDto.rank().name());
     }
 
     public void delete(PieceDto pieceDto) {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement(
-                    "DELETE FROM pieces WHERE board_file = ? AND board_rank = ?");
-            statement.setString(1, pieceDto.file().name());
-            statement.setString(2, pieceDto.rank().name());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DBException("삭제 실패", e);
-        }
+        executeUpdate("DELETE FROM pieces WHERE board_file = ? AND board_rank = ?",
+                "삭제 실패",
+                pieceDto.file().name(), pieceDto.rank().name());
     }
 
     public void deleteAll() {
-        try (final var connection = dbConnector.getConnection()) {
-            final var statement = connection.prepareStatement("DELETE FROM pieces");
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DBException("전체 삭제 실패", e);
-        }
+        executeUpdate("DELETE FROM pieces", "전체 삭제 실패");
     }
 
     private static void convertToParsingFormat(ResultSet resultSet, ArrayList<PieceDto> pieces) throws SQLException {
@@ -106,6 +62,34 @@ public class PiecesDao {
             var type = Type.convertToType(resultSet.getString("piece_type"));
 
             pieces.add(new PieceDto(file, rank, team, type));
+        }
+    }
+
+    private List<PieceDto> executeQuery(String query, String errorMessage, Object... parameters) {
+        try (final var connection = dbConnector.getConnection()) {
+            final var statement = connection.prepareStatement(query);
+            for (int i = 0; i < parameters.length; i++) {
+                statement.setObject(i + 1, parameters[i]);
+            }
+            final var resultSet = statement.executeQuery();
+            final var pieces = new ArrayList<PieceDto>();
+
+            convertToParsingFormat(resultSet, pieces);
+            return pieces;
+        } catch (SQLException e) {
+            throw new DBException(errorMessage, e);
+        }
+    }
+
+    private void executeUpdate(String query, String errorMessage, Object... parameters) {
+        try (final var connection = dbConnector.getConnection()) {
+            final var statement = connection.prepareStatement(query);
+            for (int i = 0; i < parameters.length; i++) {
+                statement.setObject(i + 1, parameters[i]);
+            }
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DBException(errorMessage, e);
         }
     }
 }
