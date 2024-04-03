@@ -1,7 +1,7 @@
 package chess.controller;
 
 import chess.domain.board.ChessBoard;
-import chess.domain.board.ScoreBoard;
+import chess.utils.ScoreCalculator;
 import chess.domain.piece.Team;
 import chess.domain.state.GameState;
 import chess.domain.state.Progress;
@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 
 public class ChessGame {
     private static final String STATUS_COMMAND = "status";
-    private static final ScoreBoard scoreBoard = new ScoreBoard();
 
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
@@ -51,9 +50,9 @@ public class ChessGame {
     }
 
     private void printChessStatus(ChessBoard chessBoard) {
-        double blackScore = scoreBoard.calculateScore(chessBoard, Team.BLACK);
-        double whiteScore = scoreBoard.calculateScore(chessBoard, Team.WHITE);
-        Team winner = scoreBoard.findWinner(blackScore, whiteScore);
+        double blackScore = ScoreCalculator.calculateScore(chessBoard, Team.BLACK);
+        double whiteScore = ScoreCalculator.calculateScore(chessBoard, Team.WHITE);
+        Team winner = ScoreCalculator.findWinner(blackScore, whiteScore);
 
         outputView.printChessStatus(blackScore, whiteScore, winner);
     }

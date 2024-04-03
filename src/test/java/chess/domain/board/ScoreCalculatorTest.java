@@ -4,6 +4,7 @@ import chess.domain.piece.*;
 import chess.domain.position.File;
 import chess.domain.position.Position;
 import chess.domain.position.Rank;
+import chess.utils.ScoreCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import static chess.domain.piece.Team.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ScoreBoardTest {
+class ScoreCalculatorTest {
     /*.KR.....
     P.PB....
     .P..Q...
@@ -47,11 +48,9 @@ class ScoreBoardTest {
     void calculateScore() {
         // given
         ChessBoard chessBoard = new ChessBoard(board);
-        ScoreBoard scoreBoard = new ScoreBoard();
-
         // when
-        double whiteScore = scoreBoard.calculateScore(chessBoard, WHITE);
-        double blackScore = scoreBoard.calculateScore(chessBoard, BLACK);
+        double whiteScore = ScoreCalculator.calculateScore(chessBoard, WHITE);
+        double blackScore = ScoreCalculator.calculateScore(chessBoard, BLACK);
 
         // then
         assertAll(
@@ -65,13 +64,12 @@ class ScoreBoardTest {
     void findWinner_BLACK() {
         // given
         ChessBoard chessBoard = new ChessBoard(board);
-        ScoreBoard scoreBoard = new ScoreBoard();
 
-        double blackScore = scoreBoard.calculateScore(chessBoard, BLACK);
-        double whiteScore = scoreBoard.calculateScore(chessBoard, WHITE);
+        double blackScore = ScoreCalculator.calculateScore(chessBoard, BLACK);
+        double whiteScore = ScoreCalculator.calculateScore(chessBoard, WHITE);
 
         // when
-        Team winner = scoreBoard.findWinner(blackScore, whiteScore);
+        Team winner = ScoreCalculator.findWinner(blackScore, whiteScore);
 
         // then
         assertThat(winner).isEqualTo(BLACK);
@@ -93,15 +91,14 @@ class ScoreBoardTest {
         Map<Position, Piece> copyBoard = new HashMap<>(board);
 
         ChessBoard chessBoard = new ChessBoard(copyBoard);
-        ScoreBoard scoreBoard = new ScoreBoard();
 
         chessBoard.move(Position.of(File.F, Rank.FOUR), Position.of(File.E, Rank.SIX), WHITE);
 
-        double blackScore = scoreBoard.calculateScore(chessBoard, BLACK);
-        double whiteScore = scoreBoard.calculateScore(chessBoard, WHITE);
+        double blackScore = ScoreCalculator.calculateScore(chessBoard, BLACK);
+        double whiteScore = ScoreCalculator.calculateScore(chessBoard, WHITE);
 
         // when
-        Team winner = scoreBoard.findWinner(blackScore, whiteScore);
+        Team winner = ScoreCalculator.findWinner(blackScore, whiteScore);
 
         // then
         assertThat(winner).isEqualTo(WHITE);
@@ -113,13 +110,12 @@ class ScoreBoardTest {
         // given
         ChessBoard chessBoard_default = new ChessBoard();
         chessBoard_default.initialBoard();
-        ScoreBoard scoreBoard = new ScoreBoard();
 
-        double blackScore = scoreBoard.calculateScore(chessBoard_default, BLACK);
-        double whiteScore = scoreBoard.calculateScore(chessBoard_default, WHITE);
+        double blackScore = ScoreCalculator.calculateScore(chessBoard_default, BLACK);
+        double whiteScore = ScoreCalculator.calculateScore(chessBoard_default, WHITE);
 
         // when
-        Team winner = scoreBoard.findWinner(blackScore, whiteScore);
+        Team winner = ScoreCalculator.findWinner(blackScore, whiteScore);
 
         // then
         assertThat(winner).isEqualTo(NONE);

@@ -1,5 +1,6 @@
-package chess.domain.board;
+package chess.utils;
 
+import chess.domain.board.ChessBoard;
 import chess.domain.piece.Team;
 import chess.domain.piece.Type;
 import chess.domain.position.File;
@@ -9,14 +10,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScoreBoard {
+public class ScoreCalculator {
 
     public static final int PAWN_HALF = 2;
 
-    public ScoreBoard() {
-    }
-
-    public Team findWinner(double blackScore, double whiteScore) {
+    public static Team findWinner(double blackScore, double whiteScore) {
         if (blackScore > whiteScore) {
             return Team.BLACK;
         }
@@ -26,7 +24,7 @@ public class ScoreBoard {
         return Team.NONE;
     }
 
-    public double calculateScore(ChessBoard chessBoard, Team team) {
+    public static double calculateScore(ChessBoard chessBoard, Team team) {
         Map<Position, Type> remaining = chessBoard.findRemainingPieces(team);
         double score = 0;
 
@@ -38,7 +36,7 @@ public class ScoreBoard {
         return score - count / PAWN_HALF;
     }
 
-    private double findSameFilePawn(Map<Position, Type> remaining) {
+    private static double findSameFilePawn(Map<Position, Type> remaining) {
         Map<File, Integer> countPawn = new HashMap<>();
 
         remaining.forEach((position, type) -> Arrays.stream(File.values())
