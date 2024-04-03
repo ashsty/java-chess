@@ -23,10 +23,6 @@ public class Progress implements GameState {
     }
 
     @Override
-    public ChessBoard getChessBoard() {
-        return chessBoard;
-    }
-    @Override
     public Team findWinner() {
         return Team.NONE;
     }
@@ -49,6 +45,16 @@ public class Progress implements GameState {
         throw new IllegalArgumentException("올바르지 않은 command입니다.");
     }
 
+    @Override
+    public boolean isEnd() {
+        return false;
+    }
+
+    @Override
+    public ChessBoard getChessBoard() {
+        return chessBoard;
+    }
+
     private GameState findKingHasCaught(Position target, Position source) {
         boolean attackKing = chessBoard.winByAttackingKing(target);
         chessBoard.move(source, target, team);
@@ -59,10 +65,5 @@ public class Progress implements GameState {
         chessService.movePiece(chessBoard, source, target);
         chessService.toggleTurn(team.toggleTeam());
         return new Progress(chessBoard, chessService, team.toggleTeam());
-    }
-
-    @Override
-    public boolean isEnd() {
-        return false;
     }
 }

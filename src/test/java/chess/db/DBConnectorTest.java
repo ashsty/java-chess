@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DBConnectorTest {
     private final DBConnector dbConnector = DBConnector.getTestDB();
+
     @DisplayName("연결 여부를 확인한다.")
     @Test
     void getConnection() {

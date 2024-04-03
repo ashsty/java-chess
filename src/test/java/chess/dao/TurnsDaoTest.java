@@ -3,10 +3,6 @@ package chess.dao;
 import chess.db.DBConnector;
 import chess.db.DBException;
 import chess.domain.piece.Team;
-import chess.domain.piece.Type;
-import chess.domain.position.File;
-import chess.domain.position.Rank;
-import chess.dto.PieceDto;
 import chess.dto.TurnDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,14 +11,11 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-class TurnsDaoTest
-{
+class TurnsDaoTest {
     private final DBConnector dbConnector = DBConnector.getTestDB();
     private final TurnsDao turnsDao = new TurnsDao(dbConnector);
 

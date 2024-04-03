@@ -3,7 +3,6 @@ package chess.domain.state;
 import chess.domain.board.ChessBoard;
 import chess.domain.piece.Team;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class End implements GameState {
@@ -27,11 +26,6 @@ public class End implements GameState {
     }
 
     @Override
-    public ChessBoard getChessBoard() {
-        throw new UnsupportedOperationException("종료한 게임의 체스판은 초기화됩니다.");
-    }
-
-    @Override
     public GameState play(List<String> inputCommand) {
         String command = inputCommand.get(0);
         if (command.equals(START_COMMAND)) {
@@ -49,5 +43,10 @@ public class End implements GameState {
     @Override
     public boolean isEnd() {
         return true;
+    }
+
+    @Override
+    public ChessBoard getChessBoard() {
+        throw new UnsupportedOperationException("종료한 게임의 체스판은 초기화됩니다.");
     }
 }

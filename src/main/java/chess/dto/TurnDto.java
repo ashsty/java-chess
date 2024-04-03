@@ -2,5 +2,5 @@ package chess.dto;
 
 import chess.domain.piece.Team;
 
-public record TurnDto(Team team){
+public record TurnDto(Team team) {
 }

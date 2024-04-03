@@ -16,22 +16,19 @@ public class Ready implements GameState {
 
     private ChessBoard chessBoard = new ChessBoard();
     private final ChessService chessService = new ChessService(
-            new PiecesDao(DBConnector.getProductionDB()), new TurnsDao(DBConnector.getProductionDB()));;
+            new PiecesDao(DBConnector.getProductionDB()), new TurnsDao(DBConnector.getProductionDB()));
+
     private Team team = Team.WHITE;
 
-    public Ready(){
+    public Ready() {
         initializeGameSetting();
-    }
-
-    @Override
-    public ChessBoard getChessBoard() {
-        return chessBoard;
     }
 
     @Override
     public Team findWinner() {
         return Team.NONE;
     }
+
     @Override
     public GameState play(List<String> inputCommand) {
         String command = inputCommand.get(0);
@@ -50,6 +47,11 @@ public class Ready implements GameState {
     @Override
     public boolean isEnd() {
         return false;
+    }
+
+    @Override
+    public ChessBoard getChessBoard() {
+        return chessBoard;
     }
 
     private void initializeGameSetting() {

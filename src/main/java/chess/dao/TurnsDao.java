@@ -31,7 +31,7 @@ public class TurnsDao {
     }
 
     public void delete() {
-        executeUpdate("DELETE FROM turns","삭제 실패");
+        executeUpdate("DELETE FROM turns", "삭제 실패");
     }
 
     private static Optional<TurnDto> convertToParsingFormat(ResultSet resultSet) throws SQLException {
