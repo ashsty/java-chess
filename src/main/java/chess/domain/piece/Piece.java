@@ -50,23 +50,19 @@ public abstract class Piece {
         return Math.abs(rankDiff) == Math.abs(fileDiff);
     }
 
-    public final List<Position> slidingMove(Position source, Position target, boolean moveFileOnly) {
+    public final List<Position> slidingMove(Position source, Position target) {
         int rankDiff = source.calculateRankDifference(target);
         int fileDiff = source.calculateFileDifference(target);
-
+        int movingDistance = Math.max(Math.abs(rankDiff), Math.abs(fileDiff));
         int rankUnit = calculateUnit(rankDiff);
         int fileUnit = calculateUnit(fileDiff);
-        int movingDistance = Math.abs(rankDiff);
 
         List<Position> path = new ArrayList<>();
-
-        if (moveFileOnly) {
-            movingDistance = Math.abs(fileDiff);
-        }
+        Position current = source;
 
         for (int i = movingDistance; i != ONE_SQUARE; i--) {
-            source = source.move(fileUnit, rankUnit);
-            path.add(source);
+            current = current.move(fileUnit, rankUnit);
+            path.add(current);
         }
         return path;
     }

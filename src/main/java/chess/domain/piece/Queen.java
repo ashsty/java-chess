@@ -27,6 +27,6 @@ public class Queen extends Piece {
 
     @Override
     public List<Position> searchPath(Position source, Position target) {
-        return slidingMove(source, target, isVerticalMove(source, target));
+        return slidingMove(source, target);
     }
 }

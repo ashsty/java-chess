@@ -27,6 +27,6 @@ public class Bishop extends Piece {
 
     @Override
     public List<Position> searchPath(Position source, Position target) {
-        return slidingMove(source, target, false);
+        return slidingMove(source, target);
     }
 }
